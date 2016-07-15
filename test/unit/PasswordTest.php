@@ -34,4 +34,19 @@ class PasswordTest extends PHPUnit_Framework_TestCase
             )
         );
     }
+
+    public function testRehash()
+    {
+        $key = new EncryptionKey(new HiddenString(\str_repeat('A', 32)));
+
+        $hash = Password::hash(new HiddenString('test password'), $key);
+        $this->assertTrue(\is_string($hash->getString()));
+
+        $this->assertFalse(
+            Password::needsRehash(
+                $hash,
+                $key
+            )
+        );
+    }
 }
